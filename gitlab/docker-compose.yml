@@ -1,0 +1,71 @@
+networks:
+  runner:
+    driver: macvlan
+    driver_opts:
+      parent: enp2s0
+    ipam:
+      config:
+        - gateway: 192.168.1.1
+          subnet: 192.168.1.0/24
+  web:
+    external: True
+services:
+  gitlab:
+    container_name: gitlab
+    deploy:
+      resources:
+        limits:
+          cpus: '6'
+          memory: 8G
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        prometheus_monitoring['enable'] = false
+        gitlab_rails['gitlab_ssh_host'] = 'gitlab.local'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2221
+        external_url 'http://gitlab.local'
+        nginx['listen_port'] = 80
+        nginx['listen_https'] = false
+
+        gitlab_rails['registry_port'] = 5005
+        gitlab_rails['registry_enabled'] = true
+        registry['enable'] = true
+        registry_nginx['enable'] = true
+        registry_external_url 'http://gitlab.local'
+        registry_nginx['listen_port'] = 5005
+        registry_nginx['listen_https'] = false
+    hostname: gitlab
+    image: gitlab/gitlab-ce:18.4.0-ce.0
+    labels:
+      - traefik.enable=true
+      - traefik.http.services.gitlab.loadbalancer.server.port=80
+      - traefik.http.routers.gitlab.rule=Host("gitlab.local")
+      - traefik.http.routers.gitlab.entrypoints=web
+      - traefik.http.routers.gitlab.service=gitlab
+    networks:
+      - web
+    ports:
+      - '2221:22'
+      - '5005:5005'
+    restart: always
+    shm_size: 512m
+    volumes:
+      - gitlab-config:/etc/gitlab
+      - gitlab-logs:/var/log/gitlab
+      - gitlab-data:/var/opt/gitlab
+  gitlab-runner:
+    container_name: gitlab-runner
+    depends_on:
+      - gitlab
+    image: gitlab/gitlab-runner:bleeding
+    networks:
+      - web
+      - runner
+    restart: always
+    volumes:
+      - gitlab-runner:/etc/gitlab-runner
+      - /var/run/docker.sock:/var/run/docker.sock
+volumes:
+  gitlab-config: Null
+  gitlab-data: Null
+  gitlab-logs: Null
+  gitlab-runner: Null

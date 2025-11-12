@@ -1,0 +1,29 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-service
+    ports:
+      - "11434:11434"
+    volumes:
+      - D:\Docker\ollama:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    restart: unless-stopped
+
+  webui:
+    image: dyrnq/open-webui:main
+    container_name: ollama-webui
+    ports:
+      - "8088:8080"
+    environment:
+      - WEBUI_SECRET_KEY="vn43098fvnejrkHB$T%Y%^Tffe"
+      - WEBUI_AUTH="false"
+      - OLLAMA_DEBUG=1
+    depends_on:
+      - ollama
+    restart: unless-stopped

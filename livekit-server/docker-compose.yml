@@ -1,0 +1,26 @@
+x-livekit-vars: &livekit-vars
+  LIVEKIT_API_KEY: "devkey"
+  LIVEKIT_API_SECRET: "secret"
+
+services:
+  livekit-server:
+    container_name: livekit-server
+    image: livekit/livekit-server:latest
+    command: --dev --bind 0.0.0.0
+    ports:
+      - "7880:7880" # WS / Token generation server
+      - "7881:7881/tcp" # WebRTC TCP
+      - "7882:7882/udp" # WebRTC UDP
+    environment:
+      LIVEKIT_WS_URL: "ws://localhost:7880"
+      <<: *livekit-vars
+  token-server:
+    container_name: token-server
+    build: .
+    ports:
+      - "3001:3001"
+    environment:
+      LIVEKIT_HOST: "http://livekit-server:7880"
+      <<: *livekit-vars
+    depends_on:
+      - livekit-server

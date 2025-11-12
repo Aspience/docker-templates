@@ -1,0 +1,27 @@
+networks:
+  web:
+    external: True
+services:
+  traefik:
+    command:
+      - '--api.dashboard=true'
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.file.filename=/etc/traefik/traefik_dynamic.yml'
+      - '--entrypoints.web.address=:80'
+      - '--entrypoints.websecure.address=:443'
+    container_name: traefik
+    image: traefik:v3.5.3
+    networks:
+      - web
+    ports:
+      - '80:80'
+      - '443:443'
+      - '8081:8080'
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/certificates:/etc/certificates:ro
+      - traefik-config:/etc/traefik
+volumes:
+  traefik-config: Null

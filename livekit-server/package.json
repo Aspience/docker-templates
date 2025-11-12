@@ -1,0 +1,14 @@
+{
+  "name": "token-server",
+  "version": "1.0.0",
+  "description": "LiveKit Token Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "livekit-server-sdk": "^2.14.0"
+  }
+}

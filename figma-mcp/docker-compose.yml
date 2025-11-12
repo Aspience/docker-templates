@@ -1,0 +1,6 @@
+services:
+  figma-mcp:
+    container_name: figma-mcp-service
+    build: .
+    env_file:
+      - .env
