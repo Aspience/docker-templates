@@ -9,6 +9,7 @@ Simple Figma MCP server based on the [figma-mcp](https://github.com/figma/figma-
 ### Get file key from URL
 Example:
 `https://www.figma.com/design/ANryptvHthbfthrtAscOd/Project?node-id=52-11455`
+
 File key:
 `ANryptvHthbfthrtAscOd`
 
