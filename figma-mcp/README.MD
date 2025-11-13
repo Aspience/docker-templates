@@ -1,8 +1,8 @@
-Simple Figma MCP server based on the [figma-mcp](https://github.com/figma/figma-mcp) by [paulvandermeijs](https://github.com/paulvandermeijs/)
+Simple Figma MCP server based on the [figma-mcp](https://github.com/paulvandermeijs/figma-mcp) by [paulvandermeijs](https://github.com/paulvandermeijs/)
 
 # Setup
-
-`.env` file is required. PAss Figma token to it `FIGMA_TOKEN`
+1. Clone `.env.example` file and rename to `.env`
+2. Pass Figma Personal Access Token to it `FIGMA_TOKEN`
 
 # Hints
 
@@ -19,13 +19,13 @@ Enter commands directly into the assistant using slash.
 
 - `/help:` Help: How to use this Figma file MCP server
 
-- `/parse_figma_url`/: Parse a Figma URL to extract IDs and determine the URL type
+- `/parse_figma_url`: Parse a Figma URL to extract IDs and determine the URL type
 
-- `/get_file`/: Get file contents from a Figma file using file key
+- `/get_file`: Get file contents from a Figma file using file key
 
 - `/export_images`: Export images from a Figma file using file key
 
-- `/get_file_nodes`/: Get specific nodes from a file using file key
+- `/get_file_nodes`: Get specific nodes from a file using file key
 
 # Windows
 
@@ -40,5 +40,5 @@ Enter commands directly into the assistant using slash.
    ```shell
    docker.exe compose --project-directory "{AbsolutePath}\figma-mcp" run --rm -T figma-mcp
    ```
-4. Enable MCP Server via checkbox
+4. Enable Created MCP Server via checkbox
 5. Click "Apply"
